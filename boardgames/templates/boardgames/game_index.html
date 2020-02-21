@@ -1,0 +1,141 @@
+{% extends 'boardgames/base.html' %}
+
+{% load game_index_extras %}
+
+{% block title %}Board Games{% endblock %}
+
+{% block content %}
+    <script type="text/javascript">
+
+        function intOrString(value, setHigh){
+            if(isNaN(value))
+            {
+                if(value == "None")
+                {
+                    if(setHigh)
+                    {
+                        return Number.MAX_SAFE_INTEGER;
+                    }
+                    else{
+                        return 0;
+                    }
+                }
+                return value.toLowerCase();
+            }
+            else
+            {
+                return parseFloat(value);
+            }
+        }
+
+        function sortFunction(element){
+            siblings = element.parentElement.children;
+            column = 0;
+            for(column; column < siblings.length; column++)
+            {
+                if(siblings[column] === element){
+                    break;
+                }
+            }
+
+            var mult = 1;
+
+            if($(element).hasClass("inc"))
+            {
+                mult = -1;
+                $(element).removeClass("inc");
+                $(element).addClass("dec");
+            }     
+            else if($(element).hasClass("dec"))
+            {
+                $(element).removeClass("dec");
+                $(element).addClass("inc");
+            }
+
+            var $tbody = $('#boardgame_table tbody');
+            $tbody.find('tr').sort(function(a,b){ 
+                var tda = intOrString($(a).find('td:eq('+column+')').text(), mult == 1); // can replace 1 with the column you want to sort on
+                var tdb = intOrString($(b).find('td:eq('+column+')').text(), mult == 1); // this will sort on the second column
+                        // if a < b return 1
+                var equality =  tda > tdb ? 1 
+                    // else if a > b return -1
+                    : tda < tdb ? -1 
+                    // else they are equal - return 0    
+                    : 0;
+                return equality * mult;
+            }).appendTo($tbody);
+        }
+    </script> 
+    <h2>Board Games</h2>
+    {% if boardgames_list %}
+        <table class="table" id="boardgame_table">
+            <thead>
+                <tr>
+                    <th class='dec' scope="col" onClick='sortFunction(this);'>
+                        Name<i class="fa fa-fw fa-sort"></i>
+                    </th>
+                    <th class='inc' scope="col" onClick='sortFunction(this);'>
+                        Rating<i class="fa fa-fw fa-sort"></i>
+                    </th>
+                    <th class='inc' scope="col" onClick='sortFunction(this);'>
+                        Weight<i class="fa fa-fw fa-sort"></i>
+                    </th>
+                    <th class='inc' scope="col" onClick='sortFunction(this);'>
+                        Min Players<i class="fa fa-fw fa-sort"></i>
+                    </th>
+                    <th class='inc' scope="col" onClick='sortFunction(this);'>
+                        Max Players<i class="fa fa-fw fa-sort"></i>
+                    </th>
+                    <th class='inc' scope="col" onClick='sortFunction(this);'>
+                        Number of Plays<i class="fa fa-fw fa-sort"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for boardgame in boardgames_list %}
+                    <tr>
+                        <td scope="row">
+                            <a href="/boardgames/games/{{boardgame.id}}/">{{boardgame.name}}</a>
+                        </td>
+                        <td>{{boardgame.average}}</td>
+                        <td>{{boardgame.weight}}</td>
+                        <td>{{boardgame.min_players}}</td>
+                        <td>{{boardgame.max_players}}</td>
+                        <td>{{boardgame.plays|get_play_count}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No boardgames are available.</p>
+    {% endif %}
+    <h2>Expansions</h2>
+    {% if expansions_list %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Min Players</th>
+                <th scope="col">Max Players</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expansion in expansions_list %}
+                <tr>
+                    <td scope="row">
+                        <a href="/boardgames/games/{expansion.id}}/">{{expansion.name}}</a>
+                    </td>
+                    <td>{{expansion.average}}</td>
+                    <td>{{expansion.weight}}</td>
+                    <td>{{expansion.min_players}}</td>
+                    <td>{{expansion.max_players}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No expansions are available.</p>
+    {% endif %}
+{% endblock %}

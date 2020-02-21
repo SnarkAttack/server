@@ -1,0 +1,22 @@
+{% if statistics %}
+    <ul>
+        <li>Average average: {{statistics.average}}</li>
+        <li>Average weight: {{statistics.weight}}</li>
+        <li>Categories:
+            <ol>
+            {% for category in statistics.categories %}
+                <li>{{ category.category_name }}</li>
+            {% endfor %}
+            </ol>
+        </li>
+        <li>Mechanics: 
+            <ol>
+                {% for mechanic in statistics.mechanics %}
+                    <li>{{ mechanic.mechanic_name }}</li>
+                {% endfor %}
+            </ol>
+        </li>
+    </ul>
+{% else %}
+    <p>No boardgames are available.</p>
+{% endif %}

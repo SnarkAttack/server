@@ -1,0 +1,9 @@
+{% if boardgames_list %}
+    <ul>
+    {% for boardgame in boardgames_list %}
+        <li><a href="/boardgames/games/{{boardgame.id}}/">{{boardgame.name}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No boardgames are available.</p>
+{% endif %}

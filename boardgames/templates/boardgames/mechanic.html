@@ -1,0 +1,14 @@
+{% if mechanic %}
+    <ul>
+        <li>Name: {{mechanic.mechanic_name}}</li>
+        <li>Games with this mechanic:             
+            <ol>
+            {% for boardgame in mechanic.boardgame_set.all %}
+                <li><a href="/boardgames/games/{{boardgame.id}}/">{{ boardgame.name }}</a></li>
+            {% endfor %}
+            </ol>
+        </li>
+    </ul>
+{% else %}
+    <p>No mechanics are available.</p>
+{% endif %}

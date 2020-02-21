@@ -1,0 +1,45 @@
+{% extends 'boardgames/base.html' %}
+
+{% load game_index_extras %}
+
+{% block title %}Board Games{% endblock %}
+
+{% block content %}
+    {% if boardgame %}
+        <ul>
+            <li>Name: {{boardgame.name}}</li>
+            <li>Average: {{boardgame.average}}</li>
+            <li>Weight: {{boardgame.weight}}</li>
+            <li>Categories:             
+                <ol>
+                {% for category in boardgame.categories.all %}
+                    <li><a href="/boardgames/categories/{{category.id}}/">{{ category.category_name }}</a></li>
+                {% endfor %}
+                </ol></li>
+            <li>Mechanics:             
+                <ol>
+                {% for mechanic in boardgame.mechanics.all %}
+                    <li><a href="/boardgames/mechanics/{{mechanic.id}}/">{{ mechanic.mechanic_name }}</a></li>
+                {% endfor %}
+                </ol>
+            </li>
+            {% if boardgame.base_game %}
+            <li>Base game:
+                <ul><a href="/boardgames/games/{{boardgame.base_game.id}}/">{{boardgame.base_game.name}}</a></ul>
+            </li>
+            {% endif %}
+            {% if expansions %}
+            <li>Expansions:
+                <ol>
+                    {% for expansion in expansions %}
+                        <li><a href="/boardgames/games/{{expansion.id}}/">{{ expansion.name }}</a></li>
+                    {% endfor %}
+                    </ol>
+            </li>
+            {% endif %}
+            <li>Times Played: {{ boardgame.plays|get_play_count }}</li>
+        </ul>
+    {% else %}
+        <p>No boardgames are available.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% if mechanics_list %}
+    <ul>
+    {% for mechanics in mechanics_list %}
+        <li><a href="/boardgames/mechanics/{{mechanics.id}}/">{{mechanics.mechanic_name}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No mechanics are available.</p>
+{% endif %}

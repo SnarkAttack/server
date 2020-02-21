@@ -1,0 +1,14 @@
+{% if category %}
+    <ul>
+        <li>Name: {{category.category_name}}</li>
+        <li>Games in this category:             
+            <ol>
+            {% for boardgame in category.boardgame_set.all %}
+                <li><a href="/boardgames/games/{{boardgame.id}}/">{{ boardgame.name }}</a></li>
+            {% endfor %}
+            </ol>
+        </li>
+    </ul>
+{% else %}
+    <p>No boardgames are available.</p>
+{% endif %}
