@@ -13,3 +13,7 @@ Install pipenv using `pip3 install pipenv`.
 Navigate into the server folder and run `pipenv install`, which will install all required packages.
 
 Run the server using the standard `python3 manage.py runserver`
+
+If you for some reason intend to use this in production, please for the love of all that is good any holy change the SECRET_KEY in settings/settings.py. A new one can be generated with:
+
+`python3 manage.py shell -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`
